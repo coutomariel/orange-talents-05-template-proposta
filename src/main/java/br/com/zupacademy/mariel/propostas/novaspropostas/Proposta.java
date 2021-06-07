@@ -37,6 +37,13 @@ public class Proposta {
 	@PositiveOrZero
 	private BigDecimal salario;
 
+	/**
+	 * @deprecated construtor para uso exclusivo do hibernate
+	 */
+	@Deprecated
+	public Proposta() {
+	}
+
 	public Proposta(@NotBlank @Email String email, @NotBlank String nome, @CPF @NotBlank String documento,
 			@NotBlank String endereco, @NotNull @PositiveOrZero BigDecimal salario) {
 		this.email = email;

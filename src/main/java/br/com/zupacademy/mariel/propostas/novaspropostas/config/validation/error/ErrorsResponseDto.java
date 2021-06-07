@@ -10,5 +10,9 @@ public class ErrorsResponseDto {
 	public List<ErrorValidation> getErrors() {
 		return errors;
 	}
+	
+	public void addError(ErrorValidation error) {
+		this.errors.add(error);
+	}
 
 }
