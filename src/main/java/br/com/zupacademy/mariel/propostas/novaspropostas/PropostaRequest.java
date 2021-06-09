@@ -21,7 +21,7 @@ public class PropostaRequest {
 	@Email
 	@NotBlank
 	private String email;
-	
+
 	@NotBlank
 	private String nome;
 
@@ -37,7 +37,7 @@ public class PropostaRequest {
 	@PositiveOrZero
 	private BigDecimal salario;
 
-	
+
 	public PropostaRequest(@Email @NotBlank String email, @NotBlank String nome, @CNPJ @CPF @NotBlank String documento,
 			@NotBlank String endereco, @NotNull @PositiveOrZero BigDecimal salario) {
 		this.email = email;
@@ -68,12 +68,11 @@ public class PropostaRequest {
 	}
 
 	public Proposta toModel() {
-		return new Proposta(email, nome, documento, endereco, salario);
+		return new Proposta(email, nome, documento, endereco, salario, null);
 	}
-	
+
 	public String getTipo() {
 		return documento.length() == 11 ? "PF" : "PJ";
 	}
 
-	
 }
