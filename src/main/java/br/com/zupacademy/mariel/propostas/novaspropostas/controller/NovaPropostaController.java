@@ -1,4 +1,4 @@
-package br.com.zupacademy.mariel.propostas.novaspropostas;
+package br.com.zupacademy.mariel.propostas.novaspropostas.controller;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.zupacademy.mariel.propostas.feignclients.consultadocumento.ConsultaDocumentoClientRequest;
 import br.com.zupacademy.mariel.propostas.feignclients.consultadocumento.ConsultaDocumentoFeignClient;
+import br.com.zupacademy.mariel.propostas.novaspropostas.PropostaRequest;
 import br.com.zupacademy.mariel.propostas.novaspropostas.entities.Proposta;
 import br.com.zupacademy.mariel.propostas.novaspropostas.entities.StatusProposta;
 import br.com.zupacademy.mariel.propostas.novaspropostas.repositories.PropostasRepository;
