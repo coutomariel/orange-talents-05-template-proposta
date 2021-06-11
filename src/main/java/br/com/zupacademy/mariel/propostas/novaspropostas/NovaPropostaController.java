@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.zupacademy.mariel.propostas.feignclients.ConsultaDocumentoClientRequest;
-import br.com.zupacademy.mariel.propostas.feignclients.ConsultaDocumentoFeignClient;
+import br.com.zupacademy.mariel.propostas.feignclients.consultadocumento.ConsultaDocumentoClientRequest;
+import br.com.zupacademy.mariel.propostas.feignclients.consultadocumento.ConsultaDocumentoFeignClient;
+import br.com.zupacademy.mariel.propostas.novaspropostas.entities.Proposta;
+import br.com.zupacademy.mariel.propostas.novaspropostas.entities.StatusProposta;
+import br.com.zupacademy.mariel.propostas.novaspropostas.repositories.PropostasRepository;
 import feign.FeignException;
 
 @RestController
@@ -56,10 +59,7 @@ public class NovaPropostaController {
 		try {
 			String statusDaConsulta = consultaDocumentoFeignClient.consultaDocumento(consulta)
 					.getResultadoSolicitacao();
-			if ("COM_RESTRICAO".equals(statusDaConsulta)) {
-				return StatusProposta.NAO_ELEGIVEL;
-			}
-			return StatusProposta.ELEGIVEL;
+			return "COM_RESTRICAO".equals(statusDaConsulta) ? StatusProposta.NAO_ELEGIVEL : StatusProposta.ELEGIVEL;
 		} catch (FeignException e) {
 			return StatusProposta.NAO_ELEGIVEL;
 		}

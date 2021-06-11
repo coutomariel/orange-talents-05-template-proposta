@@ -14,6 +14,7 @@ import org.hibernate.validator.group.GroupSequenceProvider;
 import br.com.zupacademy.mariel.propostas.novaspropostas.config.validation.groups.DocumentGroupSequenceProvider;
 import br.com.zupacademy.mariel.propostas.novaspropostas.config.validation.groups.PessoaFisica;
 import br.com.zupacademy.mariel.propostas.novaspropostas.config.validation.groups.PessoaJuridica;
+import br.com.zupacademy.mariel.propostas.novaspropostas.entities.Proposta;
 
 @GroupSequenceProvider(value = DocumentGroupSequenceProvider.class)
 public class PropostaRequest {

@@ -1,4 +1,4 @@
-package br.com.zupacademy.mariel.propostas.novaspropostas;
+package br.com.zupacademy.mariel.propostas.novaspropostas.entities;
 
 import java.math.BigDecimal;
 
@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -40,6 +41,9 @@ public class Proposta {
 	@Enumerated(EnumType.STRING)
 	private StatusProposta status;
 
+	@OneToOne
+	private Cartao cartao;
+
 	/**
 	 * @deprecated construtor para uso exclusivo do hibernate
 	 */
@@ -71,6 +75,14 @@ public class Proposta {
 
 	public void setStatus(StatusProposta status) {
 		this.status = status;
+	}
+
+	public Cartao getCartao() {
+		return cartao;
+	}
+
+	public void setCartao(Cartao cartao) {
+		this.cartao = cartao;
 	}
 
 }

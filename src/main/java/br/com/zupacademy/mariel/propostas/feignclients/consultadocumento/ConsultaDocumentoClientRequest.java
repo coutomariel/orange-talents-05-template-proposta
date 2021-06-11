@@ -1,4 +1,4 @@
-package br.com.zupacademy.mariel.propostas.feignclients;
+package br.com.zupacademy.mariel.propostas.feignclients.consultadocumento;
 
 import javax.validation.constraints.NotEmpty;
 
