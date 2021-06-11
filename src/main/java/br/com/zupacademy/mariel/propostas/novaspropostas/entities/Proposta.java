@@ -72,6 +72,10 @@ public class Proposta {
 	public String getDocumento() {
 		return documento;
 	}
+	
+	public StatusProposta getStatus() {
+		return status;
+	}
 
 	public void setStatus(StatusProposta status) {
 		this.status = status;
