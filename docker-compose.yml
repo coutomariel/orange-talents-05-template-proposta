@@ -133,6 +133,25 @@ services:
       VAULT_DEV_ROOT_TOKEN_ID: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
+     
+#  propostas:
+#    build: .
+#    restart: always
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      - mysql_db
+#    command: sh -c './wait-for mysql_db:3306 -- npm start'
+
+  mysql_db:
+    image: "mysql:latest"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: propostas_db
+      MYSQL_ROOT_PASSWORD: root
+  
 
 volumes:
   grafana-volume:
