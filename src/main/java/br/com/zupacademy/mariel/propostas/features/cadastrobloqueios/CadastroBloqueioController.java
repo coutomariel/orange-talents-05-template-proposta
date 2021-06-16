@@ -43,25 +43,21 @@ public class CadastroBloqueioController {
 			return ResponseEntity.notFound().build();
 		}
 
-
 		Cartao cartao = buscaCartao.get();
 		if (cartao.isBloqueado()) {
 			return ResponseEntity.unprocessableEntity().body("Cartão já se encontra bloqueado!");
-		} 
-		
+		}
+
 		String retornoSistemaLegado = informaBloqueioCartaoParaSistemaLegado(cartaoId);
-		if(retornoSistemaLegado.equals("BLOQUEADO")) {
-			System.out.println("Bloqueou");
-			
+		if (retornoSistemaLegado.equals("BLOQUEADO")) {
 			cartao.bloquear();
 
 			WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
 			String remoteIp = details.getRemoteAddress();
 			String userAgent = request.getHeader("User-agent");
-			
+
 			bloqueiosRepository.save(new Bloqueio(buscaCartao.get(), remoteIp, userAgent));
 		}
-
 
 		return ResponseEntity.ok().build();
 	}
@@ -70,11 +66,8 @@ public class CadastroBloqueioController {
 		try {
 			SolicitacaoBloqueioResponse response = clientBloqueioDeCartao.bloqueiaCartao(cartaoId,
 					new SolicitacaoBloqueioRequest("propostas-api"));
-			System.out.println("Entrou no try");
 			return response.getResultado();
 		} catch (FeignClientException e) {
-			System.out.println("Entrou no catch");
-			System.out.println("Exception: " + e.getMessage());
 			return "ERROR";
 		}
 	}
