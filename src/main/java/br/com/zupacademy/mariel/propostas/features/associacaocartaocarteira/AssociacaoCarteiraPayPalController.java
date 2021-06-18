@@ -13,18 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.zupacademy.mariel.propostas.clientsfeign.comunicaassociacaocartaocarteira.AssociacaoClientRequest;
-import br.com.zupacademy.mariel.propostas.clientsfeign.comunicaassociacaocartaocarteira.ComunicaAssociacaoCartaoCarteiraFeignClient;
 import br.com.zupacademy.mariel.propostas.domain.entities.Cartao;
 import br.com.zupacademy.mariel.propostas.domain.entities.Carteira;
 import br.com.zupacademy.mariel.propostas.domain.entities.TipoCarteira;
 import br.com.zupacademy.mariel.propostas.domain.repositories.CartaoRepository;
 import br.com.zupacademy.mariel.propostas.domain.repositories.CarteirasRepository;
-import feign.FeignException;
 
 @RestController
 @RequestMapping("/cartoes")
-public class AssociacaoCartaoCarteiraController {
+public class AssociacaoCarteiraPayPalController {
 
 	@Autowired
 	private CartaoRepository cartaoRepository;
@@ -33,7 +30,7 @@ public class AssociacaoCartaoCarteiraController {
 	private CarteirasRepository carteirasRepository;
 
 	@Autowired
-	private ComunicaAssociacaoCartaoCarteiraFeignClient apiCartoes;
+	private IntegracaoApiCartoes apiCartoes;
 
 	@Transactional
 	@PostMapping("/{cartaoId}/carteiras/paypal")
@@ -48,28 +45,18 @@ public class AssociacaoCartaoCarteiraController {
 			return ResponseEntity.unprocessableEntity().build();
 		}
 
-		String clientResponse = comunicaAssociacaoCartaCarteira(cartaoId,
-				new AssociacaoClientRequest(associacaoReq.getEmail(), TipoCarteira.PAYPAL));
-		if (!clientResponse.equals("ASSOCIADA")) {
+		boolean associacaoComunicadaAoSistemaLegado = apiCartoes.comunicaAssociacaoCartaCarteira(cartaoId, associacaoReq.getEmail(), TipoCarteira.PAYPAL);
+		if (!associacaoComunicadaAoSistemaLegado) {
 			return ResponseEntity.unprocessableEntity().build();
 		}
-
+		
 		Cartao cartao = cartaoRepository.findById(cartaoId).get();
 		Carteira novaCarteira = carteirasRepository.save(new Carteira(cartao, TipoCarteira.PAYPAL));
 
-		URI uri = uriBuilder.path("/{cartaoId}/carteiras/{id}").buildAndExpand(cartaoId, novaCarteira.getId()).toUri();
+		URI uri = uriBuilder.path("/{cartaoId}/carteiras/{id}").buildAndExpand(cartao.getId(), novaCarteira.getId()).toUri();
 		return ResponseEntity.created(uri).body("Carteira associada com sucesso!");
 
 	}
 
-	private String comunicaAssociacaoCartaCarteira(String cartaoId, AssociacaoClientRequest associacaoClientRequest) {
-
-		try {
-			return apiCartoes.comunicaAvisoViagem(cartaoId, associacaoClientRequest).getResultado();
-		} catch (FeignException e) {
-			System.out.println("Falhou");
-			return "FALHA";
-		}
-	}
 
 }
