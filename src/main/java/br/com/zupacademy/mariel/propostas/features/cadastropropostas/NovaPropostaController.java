@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,19 +33,22 @@ public class NovaPropostaController {
 
 	@Autowired
 	private ConsultaDocumentoFeignClient consultaDocumentoFeignClient;
+	
+	@Autowired
+	private TextEncryptor textEncryptor;
 
 	@PostMapping
 	@Transactional
 	public ResponseEntity<?> criaProposta(@RequestBody @Valid PropostaRequest req, UriComponentsBuilder uriBuilder) {
 
-		Optional<Proposta> propostaComDocumentoInformado = propostasRepository.findByDocumento(req.getDocumento());
+		Optional<Proposta> propostaComDocumentoInformado = propostasRepository.findByDocumento(textEncryptor.encrypt(req.getDocumento()));
 		if (propostaComDocumentoInformado.isPresent()) {
 			Map<String, String> response = new HashMap<String, String>();
 			response.put("Documento", "Já existe proposta para este documento");
 			return ResponseEntity.unprocessableEntity().body(response);
 		}
 
-		Proposta novaProposta = propostasRepository.save(req.toModel());
+		Proposta novaProposta = propostasRepository.save(req.toModel(textEncryptor));
 		StatusProposta statusConsulta = consultaStatusCliente(novaProposta);
 		novaProposta.setStatus(statusConsulta);
 

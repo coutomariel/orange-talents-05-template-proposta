@@ -10,6 +10,7 @@ import javax.validation.constraints.PositiveOrZero;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 import org.hibernate.validator.group.GroupSequenceProvider;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 import br.com.zupacademy.mariel.propostas.domain.entities.Proposta;
 import br.com.zupacademy.mariel.propostas.features.cadastropropostas.validacaodocumento.DocumentGroupSequenceProvider;
@@ -68,8 +69,8 @@ public class PropostaRequest {
 		return salario;
 	}
 
-	public Proposta toModel() {
-		return new Proposta(email, nome, documento, endereco, salario, null);
+	public Proposta toModel(TextEncryptor encryptor) {
+		return new Proposta(email, nome, encryptor.encrypt(documento), endereco, salario, null);
 	}
 
 	public String getTipo() {
